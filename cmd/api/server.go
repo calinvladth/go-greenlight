@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -19,6 +20,8 @@ func (app *application) serve() error {
 		ErrorLog:     log.New(app.logger, "", 0),
 	}
 
+	shutdownError := make(chan error)
+
 	go func() {
 		quit := make(chan os.Signal, 1)
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
@@ -27,7 +30,19 @@ func (app *application) serve() error {
 		app.logger.PrintInfo("caught signal", map[string]string{
 			"signal": s.String()})
 
-		os.Exit(0)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		err := srv.Shutdown(ctx)
+		if err != nil {
+			shutdownError <- err
+		}
+
+		app.logger.PrintInfo("completing background tasks", map[string]string{
+			"addr": srv.Addr})
+
+		app.wg.Wait()
+		shutdownError <- nil
 	}()
 
 	app.logger.PrintInfo("starting server", map[string]string{
