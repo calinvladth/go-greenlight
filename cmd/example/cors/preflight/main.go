@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() { fetch("http://localho
 method: "POST", headers: {
 'Content-Type': 'application/json' },
 body: JSON.stringify({
-email: 'calinvladth@icloud.com', password: 'Nikeul1q2w3e'
+email: 'test@test.com', password: 'test'
 }) }).then(
 function (response) { response.text().then(function (text) {
 document.getElementById("output").innerHTML = text; });
