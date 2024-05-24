@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"greenlight.calinvladth.com/internal/validator"
 	"github.com/lib/pq"
+	"greenlight.calinvladth.com/internal/validator"
 	"time"
 )
 

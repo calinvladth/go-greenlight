@@ -5,6 +5,7 @@
     "healthcheck",
     "httpsnoop",
     "jsonlog",
+    "realip",
     "tmpl"
   ]
 }
